@@ -1,6 +1,6 @@
 const mysql = require ('mysql');
 const inquirer = require('inquirer');
-const { allowedNodeEnvironmentFlags } = require('node:process');
+// const { allowedNodeEnvironmentFlags } = require('node:process');
 require('console.table');
 
 
@@ -55,15 +55,16 @@ start();
 function viewDepartments() {
 
     // Requesting data from our DB
-    connection.query("SELECT * FROM department", function(error, res) {
+    connection.query("SELECT * FROM employee_db.department", function(error, res) {
         if(error) {
             console.log(error);
         }
 
+        console.log(res);
         console.table(res);
         start();
     })
-}
+};
 
 function viewRoles() {
     connection.query("SELECT * FROM role", function(error, res) {
@@ -73,7 +74,19 @@ function viewRoles() {
 
         console.table(res);
         start();
-}
+    })
+};
+
+function viewEmployees() {
+    connection.query("SELECT * FROM employee", function(error, res) {
+        if(error) {
+            console.log(error);
+        }
+
+        console.table(res);
+        start();
+    })
+};
 
 function addDepartment() {
 
@@ -83,11 +96,35 @@ function addDepartment() {
             name: "departmentName",
             message: "What department do you want to add?"
         },
-        {}
     ]).then(answer => {
 
         // Requesting data from our DB
-    connection.query("INSERT INTO department SET ?", { name: "Finance" } , function(error, res) {
+    connection.query("INSERT INTO department SET ?", {name: answer.departmentName} , function(error, res) {
+        if(error) {
+            console.log(error);
+        }
+
+        console.table(res);
+        start();
+    })
+    })
+}
+
+function addRoles() {
+
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: "departmentName",
+            message: "What department do you want to add?"
+        },
+        {
+
+        }
+    ]).then(answer => {
+
+        // Requesting data from our DB
+    connection.query("INSERT INTO department SET ?", {name: answer.input} , function(error, res) {
         if(error) {
             console.log(error);
         }
