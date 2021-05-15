@@ -131,7 +131,7 @@ function addRoles() {
     ]).then(answer => {
 
         // Requesting data from our DB
-    connection.query("INSERT INTO role SET ?", {name: answer.title, name: answer.salary, name: answer.department_id}, function(error, res) {
+    connection.query("INSERT INTO role SET ?", {title: answer.title, salary: answer.salary, department_id: answer.department_id}, function(error, res) {
         if(error) {
             console.log(error);
         }
@@ -168,7 +168,7 @@ function addEmployee() {
     ]).then(answer => {
 
         // Requesting data from our DB
-    connection.query("INSERT INTO employee SET ?", {name: answer.first_name, name: answer.last_name, name: answer.role_id, name: answer.manager_id}, function(error, res) {
+    connection.query("INSERT INTO employee SET ?", {first_name: answer.first_name, last_name: answer.last_name, role_id: answer.role_id, manager_id: answer.manager_id}, function(error, res) {
         if(error) {
             console.log(error);
         }
