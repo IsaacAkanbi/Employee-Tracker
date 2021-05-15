@@ -1,7 +1,8 @@
-const mysql = require ('mysql');
+const mysql = require('mysql');
 const inquirer = require('inquirer');
 // const { allowedNodeEnvironmentFlags } = require('node:process');
 require('console.table');
+//const start = require('start');
 
 
 // Sets up our Connection to the MySQL DB
@@ -22,7 +23,7 @@ function start() {
             type: "list",
             name: "options",
             message: "What would you like to do?",
-            choices: ["View Departments", "View Roles", "View Employees", "Add Department", "Add Roles", "Add Employees", "Update Employee Role", "Update Employee Manager"]
+            choices: ["View Departments", "View Roles", "View Employees", "Add Department", "Add Roles", "Add Employees", "Update Employee Role", "Update Employee Manager", "View Employees by Manager"]
         }
     ).then(answer => {
         console.log(answer);
@@ -45,6 +46,15 @@ function start() {
                 break;
             case "Add Employees":
                 addEmployee();
+                break;
+            case "Update Employee Role":
+                updateEmployeeRole();
+                break;
+            case "Update Employee Manager":
+                updateEmployeeManager();
+                break;
+            case "View Employees by Manager":
+                viewEmployeesByManager();
                 break;
         }
     })
@@ -177,4 +187,36 @@ function addEmployee() {
         start();
     })
     })
+}
+
+function updateEmployeeRole() {
+
+    inquirer.prompt([
+        {
+
+        }
+
+    ])
+
+}
+
+
+
+
+
+function updateEmployeeManager() {
+
+
+
+}
+
+
+
+function  viewEmployeesByManager() {
+
+
+
+
+
+
 }
