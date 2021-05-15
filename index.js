@@ -115,16 +115,60 @@ function addRoles() {
     inquirer.prompt([
         {
             type: 'input',
-            name: "departmentName",
-            message: "What department do you want to add?"
+            name: "title",
+            message: "What title do you want to add?"
         },
         {
-
+            type: 'input',
+            name: "salary",
+            message: "What is the salary for this role?"     
+        },
+        {
+            type: 'input',
+            name: "department_id",
+            message: "What is the department ID?"
         }
     ]).then(answer => {
 
         // Requesting data from our DB
-    connection.query("INSERT INTO department SET ?", {name: answer.input} , function(error, res) {
+    connection.query("INSERT INTO role SET ?", {name: answer.title, name: answer.salary, name: answer.department_id}, function(error, res) {
+        if(error) {
+            console.log(error);
+        }
+
+        console.table(res);
+        start();
+    })
+    })
+}
+
+function addEmployee() {
+
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: "first_name",
+            message: "Enter the first name?"
+        },
+        {
+            type: 'input',
+            name: "last_name",
+            message: "Enter the last name?"     
+        },
+        {
+            type: 'input',
+            name: "role_id",
+            message: "What is the role ID?"
+        },
+        {
+            type: 'input',
+            name: "manager_id",
+            message: "What is the manager's ID?"
+        }
+    ]).then(answer => {
+
+        // Requesting data from our DB
+    connection.query("INSERT INTO employee SET ?", {name: answer.first_name, name: answer.last_name, name: answer.role_id, name: answer.manager_id}, function(error, res) {
         if(error) {
             console.log(error);
         }
