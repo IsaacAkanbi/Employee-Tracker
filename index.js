@@ -65,7 +65,7 @@ function start() {
           viewEmployeesByManager();
           break;
       }
-    });
+    }).catch();
 }
 
 start();
