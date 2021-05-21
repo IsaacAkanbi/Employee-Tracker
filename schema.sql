@@ -26,3 +26,8 @@ CREATE TABLE employee (
   manager_id INT NOT NULL,
   PRIMARY KEY (id)
 );
+
+
+ALTER TABLE employee
+
+ADD FOREIGN KEY (role_id) REFERENCES role (id);
