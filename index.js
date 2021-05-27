@@ -25,74 +25,65 @@ const start = () => {
       name: 'options',
       message: "What would you like to do?",
       choices: [
-        'View Departments',
-        'View Roles',
-        'View Employees',
-        'Add Department',
-        'Add Roles',
-        'Add Employees',
-        'Update Employee Role',
-       'Update Employee Manager',
-       'View Employees by Manager',
+        '1) View Departments',
+        '2) View Roles',
+        '3) View Employees',
+        '4) Add Department',
+        '5) Add Roles',
+        '6) Add Employees',
+        '7) Update Employee Role',
+        '8) Update Employee Manager',
       ],
     })
     .then((answer) => {
       console.log(answer);
       switch (answer.options) {
-        case 'View Departments':
+        case '1) View Departments':
               viewDepartments();
               break;
 
-        case 'View Roles':
+        case '2) View Roles':
             viewRoles();
              break;
 
-        case 'View Employees':
+        case '3) View Employees':
               viewEmployees();
           break;
 
-        case 'Add Department':
+        case '4) Add Department':
           addDepartment();
           break;
 
-        case 'Add Roles':
-              addRole();
+        case '5) Add Roles':
+              addRoles();
           break;
 
-        case 'Add Employees':
+        case '6) Add Employees':
             addEmployee();
             break;
 
-        
-        case 'Update Employee Role':
+        case '7) Update Employee Role':
             updateEmployeeRole();
             break;
         
-        case 'Update Employee Manager':
+        case '8) Update Employee Manager':
           updateEmployeeManager();
           break;
         
-        case 'View Employees by Manager':
-            viewEmployeesByManager();
-            break;
-
         default:
           console.log(`Invalid action: ${answer.options}`);
           break;
       }
     });
 };
-//start();
-// getRoles();
 
-function getEmployees() {
+async function getEmployees() {
   connection.query("SELECT * FROM employee", (err, res) => {
       if(err) {
         console.log(err);
         throw err;
       }
-     // console.log(res)
-     // console.table(res)
+          // console.table(res)
       let data = res.map(employee => {
         return {
           name: employee.first_name,
@@ -106,93 +97,23 @@ function getEmployees() {
   });
 }
 
-//   console.log(result);
-//   const employeesArr = result.map(employee => {
-//       return {
-//         name: employee.first_name,
-//         value: employee.id,
-//       }
-//     });
-//   console.log(employeesArr);
-//   return employeesArr;
-// }
-
 async function getRoles() {
-  try{
+  connection.query("SELECT * FROM role", function (error, res) {
+    if (error) {
+      console.log(error);
+    }
 
-    let results = await connection.query("SELECT * FROM role");
-    console.log(results);
-  
-    let data = results.map(role => {
+    // Data Formatting
+    let data = res.map(role => {
       return {
         name: role.title,
         value: role.id
       }
     })
-  
+    // Return Data from DB
     return data;
-  } catch(err) {
-    console.log(err);
-    throw err;
-  }
-
-  // let results = await connection.query("SELECT * FROM role", (err, res) => {
-  //   if(err) {
-  //     console.log(err);
-  //     throw err;
-  //   }
-
-
-  //  //console.log(res);
-  //   let data = res.map(role => {
-  //     return {
-  //       name: role.title,
-  //       value: role.id
-  //     }
-  //   });
-  //   console.log("Role data ...")
-  //   console.log(data)
-  //   return data;
-  // });
+  });
 }
-
-  //   return results.map(role => {
-  //     return {
-  //       name: role.title,
-  //       value: role.id
-  //     }
-  //   });
-  // });
-
-//console.log(result);
-//  const rolesArr = await result.map(role => {
- //     return {
- //         name: role.title,
-  //        value: role.id
-    //  }
- // });
-//   return result;
-// }
-
-// const artistSearch = () => {
-//   inquirer
-//     .prompt({
-//       name: 'artist',
-//       type: 'input',
-//       message: 'What artist would you like to search for?',
-//     })
-//     .then((answer) => {
-//       const query = 'SELECT position, song, year FROM top5000 WHERE ?';
-//       connection.query(query, { artist: answer.artist }, (err, res) => {
-//         res.forEach(({ position, song, year }) => {
-//           console.log(
-//             `Position: ${position} || Song: ${song} || Year: ${year}`
-//           );
-//         });
-//         runSearch();
-//       });
-//     });
-// };
 
 const viewDepartments = () => {
   connection.query(
@@ -203,26 +124,11 @@ const viewDepartments = () => {
       }
       //console.log(res);
       console.table(res);
-      
+      start();
     });
-    start();
+    
 
 }
-// function viewDepartments() {
-//   // Requesting data from our DB
-//   connection.query(
-//     "SELECT * FROM employee_db.department",
-//     function (error, res) {
-//       if (error) {
-//         console.log(error);
-//       }
-
-//       console.log(res);
-//       console.table(res);
-//       start();
-//     }
-//   );
-// }
 
 function viewRoles() {
   connection.query("SELECT * FROM role", function (error, res) {
@@ -313,8 +219,21 @@ function addRoles() {
 }
 
 async function addEmployee() {
-  const rolesArr = await getRoles();
-  inquirer
+
+  connection.query("SELECT * FROM role", function (error, res) {
+    if (error) {
+      console.log(error);
+    }
+
+    // Data Formatting
+    let rolesArr = res.map(role => {
+      return {
+        name: role.title,
+        value: role.id
+      }
+    })
+
+    inquirer
     .prompt([
       {
         type: "input",
@@ -352,77 +271,135 @@ async function addEmployee() {
           if (error) {
             console.log(error);
           }
-
+          
           console.table(res);
           start();
         }
-      );
+        );
+      });
     });
-}
-
-// function to get list of roles and push them into an array for inquirer
-// use rolesArr in multiple places to show/select a role
-
-const updateEmployeeRole = async () => {
-  try {
-  const rolesArr = await getRoles();
-  const employeesArr = await getEmployees();
-
-  console.log(rolesArr);
-  console.log("**********");
-  console.log(employeesArr);
-  console.log("Updating employee role ...\n");
-  inquirer
-    .prompt([
-      {
-        name: "employee",
-        type: "list",
-        message: "What employee do you want to update?",
-        choices: employeesArr
-      },
-      {
-        name: "role",
-        type: "list",
-        message: "What role do you want to update?",
-        choices: rolesArr
-      },
-    ])
-    .then((res) => {
-      console.log(res.employee);
-      console.log(res.role);
-      connection.query(
-        "UPDATE employee SET employee.role_id = ? WHERE employee.id = ?",
-        [res.role, res.employee], (err, res) => {
-          if (err) throw err;
-          console.log(`${res.affectedRows} role inserted!\n`);
-          console.table(res);
-          start();
-        }
-      );
-    });
-
-  } catch (err) {
-      if(err) { 
-      console.log(err)
-    }
   }
+    
+const updateEmployeeRole = async () => {
+  // Query DB for Role info
+  connection.query("SELECT * FROM role", function (error, res) {
+    if (error) {
+      console.log(error);
+    }
+
+    // Data Formatting
+    let dataRoles = res.map(role => {
+      return {
+        name: role.title,
+        value: role.id
+      }
+    })
+
+    // Make Another DB query for Employees
+    connection.query("SELECT * FROM employee", (err, res) => {
+      if(err) {
+        console.log(err);
+        throw err;
+      }
+          // console.table(res)
+      let dataEmployees = res.map(employee => {
+        return {
+          name: employee.first_name,
+          value: employee.id
+        }
+      });
+      // Query User for More info
+      inquirer
+        .prompt([
+          {
+            name: "employee",
+            type: "list",
+            message: "What employee do you want to update?",
+            choices: dataEmployees
+          },
+          {
+            name: "role",
+            type: "list",
+            message: "What role do you want to update?",
+            choices: dataRoles
+          },
+        ])
+        .then((res) => {
+          console.log(res.employee);
+          console.log(res.role);
+          connection.query(
+            "UPDATE employee SET employee.role_id = ? WHERE employee.id = ?",
+            [res.role, res.employee], (err, res) => {
+              if (err) throw err;
+              console.log(`${res.affectedRows} role inserted!\n`);
+              console.table(res);
+              start();
+            }
+          );
+        })
+        .catch(err => {
+          console.log(err)
+        }); // End of Inquirer method
+
+    });  // end of Employee Query
+
+  });  // end of Role Query
+
 }
 
+function updateEmployeeManager() {
+  connection.query("SELECT * FROM employee", (err, res) => {
+    if(err) {
+      console.log(err);
+      throw err;
+    }
+        // console.table(res)
+    let dataEmployees = res.map(employee => {
+      return {
+        name: employee.first_name,
+        value: employee.id
+      }
+    });
+    let dataManager = res.map(employee => {
+      return {
+      name: employee.manager_id,
+          value: employee.manager_id
+        }
+    });
 
-//function updateEmployeeRole() {
+    //console.log(dataEmployees);
+    // Query User for More info
+    inquirer
+      .prompt([
+        {
+          name: "employeeId",
+          type: "list",
+          message: "What is the name of the employee you want to update?",
+          choices: dataEmployees
+        },
+        {
+          name: "managerId",
+          type: "list",
+          message: "What manager ID do you want to update to?",
+          choices: dataManager
+        },
+      ])
+      .then((res) => {
+       
+        connection.query(
+          "UPDATE employee SET employee.manager_id = ? WHERE employee.id = ?",
+          [res.managerId, res.employeeId], (err, res) => {
+            if (err) throw err;
+            console.log(`${res.affectedRows} role inserted!\n`);
+            console.table(res);
+            start();
+          }
+        );
+        
+      })
+      .catch(err => {
+        console.log(err)
+      }); // End of Inquirer method
 
-//return connection.querry("SELECT * FROM employee", function (error, result) {
-
-// })
-// need to get a list of employees from our db
-// we need to push (or put) that list into an array to show as a list of choices in our inquirer
-// that list needs to be formatted so that the name is visible but the value is the employee's id
-// example:
-// {
-//name: emp_name,
-//value: id
-// }
-// inquirer.prompt([{
-
-//  }]);
-//}
+  });  // end of Employee Query
+}
