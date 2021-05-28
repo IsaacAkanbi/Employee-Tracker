@@ -19,6 +19,7 @@
   "homepage": "https://github.com/IsaacAkanbi/Employee-Tracker#readme",
   "dependencies": {
     "console.table": "^0.10.0",
+    "fs": "0.0.1-security",
     "inquirer": "^8.0.0",
     "mysql": "^2.18.1",
     "start": "^5.1.0",

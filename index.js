@@ -33,6 +33,7 @@ const start = () => {
         '6) Add Employees',
         '7) Update Employee Role',
         '8) Update Employee Manager',
+        'I am done',
       ],
     })
     .then((answer) => {
@@ -71,7 +72,8 @@ const start = () => {
           break;
         
         default:
-          console.log(`Invalid action: ${answer.options}`);
+          console.log(`Goodbye`);
+          process.exit();
           break;
       }
     });
